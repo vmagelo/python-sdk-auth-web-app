@@ -1,0 +1,98 @@
+Set up
+======
+
+git clone repo
+py -m venv .venv
+pip install -r requirements.txt
+cp .env.sample .env
+
+Create App Service
+==================
+
+Name: vmagelo-web-app
+Rg: vmagelo-web-app (trying Chris idea to keep names the same, so far it's confusing)
+
+Set system-assigned identity, object id = 98200966-4a27-484d-89c2-337d8e28a12d
+
+Create Storage Account
+=======================
+
+Name: vmagelowebapp
+Rg: vmagelo-web-app
+Container: photos
+
+Upload one or more photos.
+
+Register application (Step 1)
+=============================
+
+Name: vmagelo-app-registration
+
+Application (client) ID: 7ab162c3-28d2-45cb-adee-83750e15ca35
+Directory (tenant) ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+Client secret: 68v7Q~bGlPT6RcpB.Jv9c9F5XJtWbhj-PDUWe
+
+Create an Azure AD security group (Step 2)
+===========================================
+
+I can't, but will use "Azure Dev Exp Docs" group.
+Object Id = 5d70863e-8659-4c91-aa9c-5b85ddf3b3aa
+
+Assign roles to application (Step 3)
+====================================
+
+az role assignment create --assignee "{appId}" ^
+    --role "{roleName}" ^
+    --resource-group "{resourceGroupName}"
+
+az role definition list ^
+    --query "sort_by([].{roleName:roleName, description:description}, &roleName)" --output table
+
+az role assignment create --assignee "7ab162c3-28d2-45cb-adee-83750e15ca35" ^
+    --role "Storage Blob Data Contributor" ^
+    --resource-group "vmagelo-web-app"
+
+{
+  "canDelegate": null,
+  "condition": null,
+  "conditionVersion": null,
+  "description": null,
+  "id": "/subscriptions/bb881e62-cf77-4d5d-89fb-29d71e930b66/resourceGroups/vmagelo-web-app/providers/Microsoft.Authorization/roleAssignments/950f8450-0f63-4ad5-b14d-ac6e3f185c42",
+  "name": "950f8450-0f63-4ad5-b14d-ac6e3f185c42",
+  "principalId": "da7532ac-208e-4033-b6e5-1234b5f79f97",
+  "principalType": "ServicePrincipal",
+  "resourceGroup": "vmagelo-web-app",
+  "roleDefinitionId": "/subscriptions/bb881e62-cf77-4d5d-89fb-29d71e930b66/providers/Microsoft.Authorization/roleDefinitions/ba92f5b4-2d11-453d-a403-e96b0029c9fe",
+  "scope": "/subscriptions/bb881e62-cf77-4d5d-89fb-29d71e930b66/resourceGroups/vmagelo-web-app",
+  "type": "Microsoft.Authorization/roleAssignments"
+}
+
+
+Set local variables (Step 4)
+============================
+set .env file
+
+    AZURE_CLIENT_ID=7ab162c3-28d2-45cb-adee-83750e15ca35
+    AZURE_TENANT_ID=72f988bf-86f1-41af-91ab-2d7cd011db47
+    AZURE_CLIENT_SECRET=68v7Q~bGlPT6RcpB.Jv9c9F5XJtWbhj-PDUWe
+
+Implement DefaultAzureCredential (Step 5)
+=========================================
+
+Edit app.py and change values to match values I'm using.
+
+Run
+===
+
+flask run
+
+
+Tabs
+====
+
+### [Azure portal](#tab/azure-portal)
+### [Azure CLI](#tab/azure-cli)
+
+### [VS Code Azure Tools extension](#tab/sign-in-vscode-azure-tools)
+### [Azure CLI](#tab/sign-in-azure-cli)
+### [Azure PowerShell](#tab/sign-in-azure-powershell)

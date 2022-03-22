@@ -1,0 +1,39 @@
+<!doctype html>
+<head>
+    <title>Hello Azure - Python Quickstart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+</head>
+<html>
+   <body>
+     <main>
+        <div class="px-4 py-3 my-2 text-center">
+            <img class="d-block mx-auto mb-4" src="{{ url_for('static', filename='images/azure-icon.svg') }}" alt="Azure Logo" width="64" height="64"/>
+            <h1 class="display-6 fw-bold text-primary">Azure SDK for Python Auth Example</h1>            
+        </div>
+
+        <div>
+
+          <table class="table table-sm mb-1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Create Date</th>
+                    <th>Content Type</th>
+                    <th>Size</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for blob in blobs %}
+              <tr>
+                <td>{{blob.name}}</td>
+                <td>{{blob.last_modified}}</td>
+                <td>{{blob.content_settings.content_type}}</td>
+                <td>{{blob.size}}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+
+        </div>
+     </main>      
+   </body>
+</html>
